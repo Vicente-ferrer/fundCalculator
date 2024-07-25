@@ -1,0 +1,47 @@
+name: Build Android APK with EAS
+
+on:
+  push:
+    branches: ["build-apk"]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "20.x" # Versão do Node a ser usada
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
+      - name: Login to Expo
+        env:
+          EXPO_CLI_USERNAME: ${{ secrets.EXPO_CLI_USERNAME }}
+          EXPO_CLI_PASSWORD: ${{ secrets.EXPO_CLI_PASSWORD }}
+        run: |
+          eas login -u $EXPO_CLI_USERNAME -p $EXPO_CLI_PASSWORD
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build Android APK
+        run: eas build --platform android --local --profile preview
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release-apk
+          path: dist/*.apk
