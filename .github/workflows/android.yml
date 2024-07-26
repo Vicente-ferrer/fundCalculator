@@ -1,4 +1,4 @@
-name: Build and Deploy Android APK
+name: Build and Deploy Android APK to git
 
 on:
   push:
