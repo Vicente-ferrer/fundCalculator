@@ -14,6 +14,7 @@ const loadFonts = async () => {
   await Font.loadAsync({
     "Work-Sans-Regular": require("./assets/fonts/WorkSans-Regular.ttf"),
     "Work-Sans-Bold": require("./assets/fonts/WorkSans-Bold.ttf"),
+    "Work-Sans-Bold": require("./assets/fonts/WorkSans-ExtraBold.ttf"),
   });
 };
 
